@@ -1,0 +1,86 @@
+// Returns a random DNA base
+const returnRandBase = () => {
+  const dnaBases = ['A', 'T', 'C', 'G']
+  return dnaBases[Math.floor(Math.random() * 4)] 
+}
+
+// Returns a random single stand of DNA containing 15 bases
+const mockUpStrand = () => {
+  const newStrand = []
+  for (let i = 0; i < 15; i++) {
+    newStrand.push(returnRandBase())
+  }
+  return newStrand
+}
+
+const pAequorFactory = (number, array) => {
+  const dna = array;
+  const specimenNum = number;
+  return {
+    
+  specimenNum, 
+  dna,
+
+  mutate(){
+   //console.log(dna);
+    let a = Math.floor(Math.random() * 15)
+    let letterToRemove = dna[a]
+    const dnaBases = ['A', 'T', 'C', 'G']
+    const removedBase = dnaBases.splice(dnaBases.indexOf(letterToRemove),1)
+    const newLetter = dnaBases[Math.floor(Math.random() * 3)]
+    dna[a] = newLetter
+    //console.log(dna)
+    return dna
+  },
+
+
+  compareDNA(pAequor){
+   // pAequor = pAequorFactory(2, mockUpStrand())
+    let sameCount = 0
+    for (let i = 0; i < this.dna.length; i++){
+        if (this.dna[i] === pAequor.dna[i]){
+          sameCount++
+        }
+    } console.log(`specimen #${this.specimenNum} and specimen #${pAequor.specimenNum} have ${(sameCount/15*100).toFixed(1)}% DNA in common.`)
+  },
+
+
+  willLikelySurvive(){
+    let cgCount = 0;
+    for (let i = 0; i<this.dna.length; i++){
+      if (this.dna[i] === 'C' || this.dna[i] === 'G'){
+        cgCount++
+      }
+    };
+    if (cgCount / this.dna.length >= 0.6){
+      return true
+    } else {return false}
+  }
+
+
+  };
+};
+
+const test = () => {
+  let pAequors = [];
+  let i = 1
+  while (pAequors.length < 30){
+    let pAequor = pAequorFactory(i,mockUpStrand())
+    if (pAequor.willLikelySurvive()){
+      pAequors.push(pAequor)
+    }
+    i++
+  }
+  console.log(pAequors)
+}
+
+//console.log(pAequorFactory(1,mockUpStrand()));
+
+//console.log(pAequorFactory(1,mockUpStrand()).compareDNA(pAequorFactory(2,mockUpStrand())));
+
+//console.log(pAequorFactory(1,mockUpStrand()).willLikelySurvive())
+console.log(test())
+
+
+
+
